@@ -63,3 +63,8 @@ Click "Add Coin" – it gets added permanently.
 Select the coin from the dropdown.
 Click "Remove Coin" – it gets deleted from coins.txt.
 
+🔥 Example Output
+BTC: USD 42,350.25 📈⬆️
+ETH: USD 3,214.50 📉⬇️
+ADA: USD 1.28 📉⬇️
+BNB: USD 412.50 📈⬆️
