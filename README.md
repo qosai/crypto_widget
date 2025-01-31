@@ -44,3 +44,22 @@ pip install -r requirements.txt
 4️⃣ Run the Widget
 python crypto_widget.py
 
+
+🎮 Usage
+✅ View Real-Time Prices
+The widget will display live crypto prices in USD, EUR, or GBP.
+Prices auto-update every 10 minutes.
+
+📈 View Historical Price Chart
+Click on a coin's price, and a 7-day price chart will appear.
+🚨 Price Alerts
+If a cryptocurrency moves ±5% within 10 minutes, an alert popup will notify you.
+
+➕ Add a New Cryptocurrency
+Type the crypto symbol in the input field.
+Click "Add Coin" – it gets added permanently.
+
+➖ Remove a Cryptocurrency
+Select the coin from the dropdown.
+Click "Remove Coin" – it gets deleted from coins.txt.
+
