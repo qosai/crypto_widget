@@ -1,0 +1,118 @@
+import tkinter as tk
+from tkinter import Label, Entry, Button, OptionMenu, StringVar, Frame, PhotoImage
+import os
+from coin_manager import add_coin, remove_coin, get_coins
+from data_handler import update_prices, show_price_chart, BINANCE_INTERVALS
+
+class CryptoGUI:
+    def __init__(self):
+        """Initialize the Crypto Widget GUI."""
+        self.root = tk.Tk()
+        self.root.title("Crypto Price Widget")
+        self.root.geometry("400x600")
+        self.root.configure(bg="#1E1E1E")
+
+        # Make widget always on top
+        self.root.wm_attributes("-topmost", 1)
+
+        # Remove taskbar entry
+        self.root.overrideredirect(True)  # ✅ Hide title bar
+
+
+    def load_images(self):
+        """Load icon images with error handling."""
+        self.up_icon = self.load_image("up_arrow.png") or PhotoImage(width=1, height=1)
+        self.down_icon = self.load_image("down_arrow.png") or PhotoImage(width=1, height=1)
+        self.chart_icon = self.load_image("chart_icon.png") or PhotoImage(width=1, height=1)
+
+    def load_image(self, filename):
+        """Safely load an image or return None if not found."""
+        path = os.path.join(os.path.dirname(__file__), "assets", filename)
+        if os.path.exists(path):
+            return PhotoImage(file=path)
+        else:
+            print(f"⚠ Warning: {filename} not found. Using empty placeholder.")
+            return None
+
+    def create_widgets(self):
+        """Create the main GUI components."""
+        self.price_frame = Frame(self.root, bg="#1E1E1E")
+        self.price_frame.pack(pady=10)
+
+        self.labels = {}
+
+        for coin in get_coins():
+            row = Frame(self.price_frame, bg="#1E1E1E")
+            row.pack(pady=2, fill=tk.X)
+
+            label = Label(row, text=f"{coin}: USD Loading...", font=("Arial", 14), fg="white", bg="#1E1E1E")
+            label.pack(side=tk.LEFT, padx=5)
+
+            chart_button = Button(row, image=self.chart_icon, bg="gray", command=lambda sym=coin: show_price_chart(sym))
+            chart_button.pack(side=tk.RIGHT, padx=5)
+
+            indicator_label = Label(row, bg="#1E1E1E")
+            indicator_label.pack(side=tk.RIGHT, padx=5)
+
+            self.labels[coin] = (label, indicator_label, chart_button)
+
+        Label(self.root, text="-----------------------------", fg="white", bg="#1E1E1E").pack(pady=5)
+
+        # Interval Selection
+        interval_frame = Frame(self.root, bg="#1E1E1E")
+        interval_frame.pack(pady=5)
+
+        Label(interval_frame, text="Update Interval:", font=("Arial", 12), fg="white", bg="#1E1E1E").pack(side=tk.LEFT, padx=5)
+
+        self.interval_dropdown = OptionMenu(interval_frame, self.selected_interval, *BINANCE_INTERVALS.keys(), command=self.change_interval)
+        self.interval_dropdown.pack(side=tk.LEFT, padx=5)
+
+        # Set default interval to "1 Hour"
+        self.selected_interval.set("1 Hour")
+
+        Label(self.root, text="-----------------------------", fg="white", bg="#1E1E1E").pack(pady=5)
+
+        # Add Coin Section
+        add_frame = Frame(self.root, bg="#1E1E1E")
+        add_frame.pack(pady=5)
+
+        Label(add_frame, text="Add Coin:", font=("Arial", 12), fg="white", bg="#1E1E1E").pack(side=tk.LEFT, padx=5)
+
+        self.coin_entry = Entry(add_frame, font=("Arial", 12), width=6)
+        self.coin_entry.pack(side=tk.LEFT, padx=5)
+
+        Button(add_frame, text="Add", command=self.add_coin, font=("Arial", 12), bg="green", fg="white").pack(side=tk.LEFT)
+
+        Label(self.root, text="-----------------------------", fg="white", bg="#1E1E1E").pack(pady=5)
+
+        # Remove Coin Section
+        remove_frame = Frame(self.root, bg="#1E1E1E")
+        remove_frame.pack(pady=5)
+
+        Label(remove_frame, text="Select Coin to Remove:", font=("Arial", 12), fg="white", bg="#1E1E1E").pack(side=tk.LEFT, padx=5)
+
+        self.coin_dropdown = OptionMenu(remove_frame, self.selected_var, *get_coins())
+        self.coin_dropdown.pack(side=tk.LEFT, padx=5)
+
+        Button(remove_frame, text="Remove", command=self.remove_coin, font=("Arial", 12), bg="red", fg="white").pack(side=tk.LEFT)
+
+        Label(self.root, text="Enjoy : by Qosai Samara", fg="white", bg="#1E1E1E", font=("Arial", 12, "bold")).pack(pady=5)
+
+    def change_interval(self, *args):
+        """Refresh the GUI with the selected interval."""
+        update_prices(self)
+
+    def add_coin(self):
+        add_coin(self.coin_entry.get().upper(), self)
+
+    def remove_coin(self):
+        remove_coin(self.selected_var.get(), self)
+
+    def refresh_dropdown(self):
+        self.coin_dropdown.destroy()
+        self.selected_var.set(get_coins()[0])
+        self.coin_dropdown = OptionMenu(self.root, self.selected_var, *get_coins())
+        self.coin_dropdown.pack(side=tk.LEFT, padx=5)
+
+    def run(self):
+        self.root.mainloop()

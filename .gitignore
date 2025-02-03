@@ -1,0 +1,9 @@
+venv/
+build/
+dist/
+__pycache__/ 
+ The  .gitignore  file is used to exclude certain files and directories from being tracked by Git. In this case, we are excluding the  venv/ ,  build/ ,  dist/ , and  __pycache__/  directories. 
+ Step 4: Create a Python Script 
+ Next, we will create a Python script that will be used to generate the widget. 
+ Create a new file named  crypto_widget.py  in the  CryptoWidget  directory and add the following code: 
+ # CryptoWidget/crypto_widget.py

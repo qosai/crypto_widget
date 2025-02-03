@@ -1,0 +1,11 @@
+CryptoWidget/
+│── main.py
+│── gui.py
+│── coin_manager.py
+│── data_handler.py
+│── coins.txt
+│── requirements.txt
+│── assets/  
+│   │── up_arrow.png  
+│   │── down_arrow.png  
+│   │── chart_icon.png  
