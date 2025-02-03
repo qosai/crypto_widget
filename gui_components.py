@@ -8,11 +8,6 @@ class UIComponents:
         self.app = app_instance
         self.labels = {}
 
-    def setup_tray(self):
-        """Setup the system tray icon."""
-        icon_path = self.get_icon_path("tray_icon.ico")  # Ensure this file exists
-        self.tray = TrayManager(self, icon_path)
-
     def create_price_list(self, coins, chart_icon):
         """Create dynamic list of coins with prices"""
         if hasattr(self, 'price_frame'):
